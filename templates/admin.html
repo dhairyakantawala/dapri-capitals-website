@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <p>Welcome, {{ current_user.username }}</p>
+
+        <h2>Manage Users</h2>
+        <form method="POST" action="{{ url_for('admin') }}">
+            <input type="text" name="new_username" placeholder="New Username" required>
+            <input type="password" name="new_password" placeholder="New Password" required>
+            <label for="notebook_access">Notebook Access:</label>
+            <select name="notebook_access" multiple>
+                {% for notebook in notebooks %}
+                <option value="{{ notebook }}">{{ notebook }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Add User</button>
+        </form>
+
+        <h2>Existing Users</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Access</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for username, details in users.items() %}
+                <tr>
+                    <td>{{ username }}</td>
+                    <td>{{ details.access | join(', ') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
+    </div>
+</body>
+</html>
